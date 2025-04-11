@@ -14,9 +14,9 @@ find_package(nlohmann_json REQUIRED)
 
 add_subdirectory(servers)
 add_subdirectory(socket)
-
+add_subdirectory(client)
 # Добавление исполняемого файла
-add_executable(network main.cpp)
+#add_executable(network main.cpp)
 
 if (TESTING_BUILD)
     add_subdirectory(tests)
