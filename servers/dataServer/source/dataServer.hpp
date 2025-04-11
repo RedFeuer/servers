@@ -1,0 +1,27 @@
+#ifndef DATASERVER_HPP
+#define DATASERVER_HPP
+
+#include "Server.hpp"
+#include <string>
+
+namespace network {
+    class DataServer : public Server {
+    public:
+        DataServer(const std::string& displayHost, int displayPort); // сообщаем координаты сервера отображения
+        ~DataServer();
+
+        void start(int port) override;
+        void stop() override;
+        void handleClient(Socket& client) override;
+
+    private:
+        Socket serverSocket;   // для приема клиентов
+        Socket display Socket; // для отправки данных на сервер отображения
+
+        std::string displayHost;
+        int displayPort;
+        bool isRunning = false;
+
+        std::string processData(const std::string& input); // функция обработки введенной строки
+    };
+}
