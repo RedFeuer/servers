@@ -20,3 +20,5 @@ namespace network {
         int serverPort;
     };
 }
+
+#endif

@@ -21,7 +21,7 @@ namespace network {
 
         bool create();
         bool bind(int port);
-        bool lister(int backlog = 5);
+        bool listen(int backlog = 5);
         bool accept(Socket& clientSocket);
         bool connect(const std::string& host, int port);
         int send(const std::string& data);
@@ -39,3 +39,5 @@ namespace network {
         bool isClosed = true;
     };
 }
+
+#endif

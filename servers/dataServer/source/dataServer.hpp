@@ -25,3 +25,5 @@ namespace network {
         std::string processData(const std::string& input); // функция обработки введенной строки
     };
 }
+
+#endif

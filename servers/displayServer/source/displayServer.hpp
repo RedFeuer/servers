@@ -17,3 +17,5 @@ namespace network {
         bool isRunning = false;
     };
 }
+
+#endif

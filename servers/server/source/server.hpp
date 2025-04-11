@@ -13,3 +13,5 @@ namespace network {
         virtual void handleClient(Socket& client) = 0;
     };
 }
+
+#endif
