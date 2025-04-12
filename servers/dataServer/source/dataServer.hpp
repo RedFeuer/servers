@@ -8,7 +8,7 @@ namespace network {
     class DataServer : public Server {
     public:
         DataServer(const std::string& displayHost, int displayPort); // сообщаем координаты сервера отображения
-        ~DataServer();
+        ~DataServer() override;
 
         void start(int port) override;
         void stop() override;
@@ -16,7 +16,7 @@ namespace network {
 
     private:
         Socket serverSocket;   // для приема клиентов
-        Socket display Socket; // для отправки данных на сервер отображения
+        Socket displaySocket; // для отправки данных на сервер отображения
 
         std::string displayHost;
         int displayPort;
