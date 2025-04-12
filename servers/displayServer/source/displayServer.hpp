@@ -6,7 +6,7 @@
 namespace network {
     class DisplayServer : public Server {
     public:
-        ~DisplayServer();
+        ~DisplayServer() override;
 
         void start(int port) override;
         void stop() override;
