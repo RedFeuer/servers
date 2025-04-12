@@ -88,7 +88,7 @@ namespace network {
         bool accept(Socket& clientSocket);
 
         /**
-         * @brief Устанавливает соединение с сервером (клиент)
+         * @brief Устанавливает соединение с сервером (клиент ->сервер)
          * @param host IP-адрес или доменное имя сервера
          * @param port Порт сервера
          * @return true - подключено, false - ошибка
