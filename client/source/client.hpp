@@ -64,7 +64,7 @@ namespace network {
         bool receiveAck();
 
     private:
-        Socket clientSocket;   ///< Сокет data_server, который обработает введенную информацию
+        Socket clientSocket;   ///< дескриптор сокета data_server и состояние того, что соединение установлено. Дальнейшие send/recv через него
         std::string serverHost; ///< Адрес data_server
         int serverPort; ///< Порт data_server
     };
