@@ -60,10 +60,10 @@ namespace network {
         #endif
     }
 
-    bool Socket::accept(network::Socket &clientSocket) {
-        sockaddr_in clientAddr{};
+    bool Socket::accept(Socket &clientSocket) {
+        sockaddr_in clientAddr{};    // хранит Host и Port клиента
         socklen_t len = sizeof(clientAddr);
-        clientSocket.sockfd = ::accept(sockfd, (sockaddr*)&clientAddr, &len);
+        clientSocket.sockfd = ::accept(sockfd, (sockaddr*)&clientAddr, &len); // создание клиентского сокета
         #ifdef _WIN32
         return clientSocket.sockfd != INVALID_SOCKET;
         #else
@@ -80,7 +80,7 @@ namespace network {
             return false;
         }
         #else
-        if (inet_pton(AF_INET, host.c_str(), &addr.sin_addr) != 1) { // IPv4 -> двоичный формат
+        if (inet_pton(AF_INET, host.c_str(), &addr.sin_addr) != 1) { // IPv4 -> бинарный формат
             return false;
         }
         #endif
