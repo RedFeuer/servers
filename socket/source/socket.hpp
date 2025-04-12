@@ -7,10 +7,12 @@
 
 #ifdef _WIN32
 #include <winsock2.h>
+#include <ws2tcpip.h> // для InetPton
 #else
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <arpa/inet.h> // для inet_pton
 #endif
 
 namespace network {

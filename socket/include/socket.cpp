@@ -60,5 +60,51 @@ namespace network {
         #endif
     }
 
+    bool Socket::accept(network::Socket &clientSocket) {
+        sockaddr_in clientAddr{};
+        socklen_t len = sizeof(clientAddr);
+        clientSocket.sockfd = ::accept(sockfd, (sockaddr*)&clientAddr, &len);
+        #ifdef _WIN32
+        return clientSocket.sockfd != INVALID_SOCKET;
+        #else
+        return clientSocket.sockfd >= 0;
+        #endif
+    }
+
+    bool Socket::connect(const std::string &host, int port) {
+        sockaddr_in addr{};
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(port);
+        #ifdef _WIN32
+        if (InetPton(AF_INET, host.c_str(), &addr.sin_addr) != 1) {
+            return false;
+        }
+        #else
+        if (inet_pton(AF_INET, host.c_str(), &addr.sin_addr) != 1) { // IPv4 -> двоичный формат
+            return false;
+        }
+        #endif
+        return ::connect(sockfd, (sockaddr*)&addr, sizeof(addr)) == 0;
+    }
+
+    int Socket::send(const std::string &data) {
+        return ::send(sockfd, data.data(), data.size(), 0);
+    }
+
+    int Socket::receive(std::string &buffer) {
+        return ::recv(sockfd, buffer.data(), buffer.size(), 0);
+    }
+
+    void Socket::close() {
+        if (!isClosed) {
+            #ifdef _WIN32
+            closesocket(sockfd)
+            #else
+            ::close(sockfd);
+            #endif
+            isClosed = true;
+        }
+    }
+
 
 }
