@@ -136,11 +136,11 @@ namespace network {
 
     private:
         #ifdef _WIN32
-        SOCKET sockfd = INVALID_SOCKED;
+        SOCKET sockfd = INVALID_SOCKED; ///< Дескриптор сокета (Windows)
         #else
-        int sockfd = -1;
+        int sockfd = -1; ///< Дескриптор сокета (POSIX)
         #endif
-        bool isClosed = true;
+        bool isClosed = true; ///< Флаг состояния сокета(закрыт/открыт)
     };
 }
 
