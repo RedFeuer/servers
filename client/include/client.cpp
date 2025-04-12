@@ -10,4 +10,23 @@ namespace network {
     bool Client::connectToServer() {
         return clientSocket.connect(serverHost, serverPort);
     }
+
+    void Client::sendData(const std::string &data) {
+        nlohmann::json requestJson;
+        requestJson["data"] = data;
+
+        std::string request = "POST /process HTTP/1.1\r\n"         // метод запроса и путь
+                              "Host: " + serverHost + "\r\n"       // адрес сервера
+                              "Content-Type: application/json\r\n" // тип содержимого
+                              "Content-Length: " + std::to_string(requestJson.dump().size()) + "\r\n" // длина тела запроса
+                              "\r\n" + requestJson.dump();   // тело запроса
+
+        clientSocket.send(request);
+    }
+
+    bool Client::receiveAck() {
+        std::string response;
+        clientSocket.receive(response);
+        return response.find("HTTP/1.1 200 OK") != std::string::npos;
+    }
 }
