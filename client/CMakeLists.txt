@@ -7,6 +7,8 @@ add_library(client STATIC include/client.cpp)
 
 target_include_directories(client PUBLIC source)
 
+target_link_libraries(client PUBLIC socket)
+
 if(WIN32)
     target_link_libraries(client PUBLIC ws2_32)
 endif()

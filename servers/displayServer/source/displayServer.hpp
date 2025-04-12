@@ -1,7 +1,7 @@
 #ifndef DISPLAYSERVER_HPP
 #define DISPLAYSERVER_HPP
 
-#include "Server.hpp"
+#include "server.hpp"
 
 namespace network {
     class DisplayServer : public Server {

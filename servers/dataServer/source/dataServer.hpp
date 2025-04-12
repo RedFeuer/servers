@@ -1,7 +1,7 @@
 #ifndef DATASERVER_HPP
 #define DATASERVER_HPP
 
-#include "Server.hpp"
+#include "server.hpp"
 #include <string>
 
 namespace network {
