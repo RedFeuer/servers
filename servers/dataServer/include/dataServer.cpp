@@ -1,5 +1,9 @@
 #include "dataServer.hpp"
 #include <nlohmann/json.hpp>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <unordered_set>
 
 namespace network {
     DataServer::DataServer(const std::string &displayHost, int displayPort)
@@ -49,6 +53,7 @@ namespace network {
         }
     }
 
+    /*ПОСЛЕ ПРОВЕРКИ НА РАБОТОСПОСОБНОСТЬ РАЗДЕЛИТЬ НА МЕТОДЫ ПОМЕНЬШЕ*/
     void DataServer::handleClient(network::Socket &client) {
         std::string request;
         client.receive(request); // получаем данные от клиента в буфер request
@@ -70,6 +75,7 @@ namespace network {
                                         "Content-Type: application/json\r\n"
                                         "Content-Length: 47\r\n\r\n"
                                         "{\"error\":\"Missing required 'data' field\"}";
+            /*передаем ошибку клиенту*/
             client.send(errorResponse);
             return;
         }
@@ -78,6 +84,59 @@ namespace network {
         /*удаление из сообщения клиента дубликатов слов*/
         std::string result = processData(data);
 
+        /*формирование запроса на сервер отображения display_server*/
+        nlohmann::json outputJson;
+        outputJson["result"] = result;
+        std::string response = "HTTP/1.1 200 OK\r\n"
+                               "Content-Type: application/json\r\n"
+                               "Content-Length:" + std::to_string(outputJson.dump().size()) + "\r\n"
+                               + "\r\b" + outputJson.dump();
+
         /*ТУТ ДОПИСАТЬ СВЯЗЬ С display_server и отправку туда данных*/
+        /*ПРОВЕРИТЬ ЛОГИКУ connect!!!!! чето я запутался, наверное пора спать*/
+        if (!displaySocket.connect(displayHost, displayPort)) {
+            throw std::runtime_error("Display server connection failed");
+        }
+        displaySocket.send(result);
+    }
+
+    /*НЕ СОВСЕМ ПОНЯЛ В ИТОГЕ ЧТО ИМЕЕТСЯ В ВИДУ ПОД ДУБЛИКАТАМИ
+     * Я УДАЛЯЛ ВСЕ ПОХОЖИЕ СЛОВА НЕЗАВИСИМО ОТ РЕГИСТРА, ОСТАВЛЯЯ ПЕРВОЕ ВОШЕДШЕЕ УНИКАЛЬНОЕ.
+     * ОБЪЯСНЮ НА ПРИМЕРЕ:
+     * Ввод: "Hello hello WORLD world"
+     * результат: "Hello WORLD"*/
+    std::string DataServer::processData(const std::string &input) {
+        /*создаем поток iss из строки input. последовательно возвращает слова из input*/
+        std::istringstream iss(input);
+        /*вектор уникальных слов в оригинальном регистре в правильном порядке. из него будем делать результат*/
+        std::vector<std::string> uniqueWords;
+        /*вспомогательное множество просмотренных слов в нижнем регистре. в нем нет повторяющихся(по определению set)*/
+        std::unordered_set<std::string> seenWords;
+
+        std::string word;
+        while (iss >> word) {
+            std::string lowerWord;
+            for (char c: word) {
+                lowerWord += static_cast<char>(std::tolower(c));
+            }
+            if (seenWords.find(lowerWord) == seenWords.end()) { // такого нет еще в seenWords
+                uniqueWords.push_back(word);   // сохраняем оригинальное слово
+                seenWords.insert(lowerWord); // добавляем для сравнение слово в нижнем регистре
+            }
+        }
+
+        std::ostringstream oss;
+        for (const auto& wrd : uniqueWords) {
+            oss << wrd << ' '; // пишем слова в поток вывода ЧЕРЕЗ ОДИН ПРОБЕЛ(последний нужно удалить)
+        }
+        /*если уникальных слов в сообщении не было(ну то есть вообще никаких слов в сообщении не было),
+         * то лишний пробел и не поставится*/
+
+        std::string result = oss.str(); // получаем результат с лишним пробелом в конце
+        if (!result.empty()) { // если строка пустая, то лишнего пробела нет
+            result.pop_back(); // удаляем лишний пробел
+        }
+
+        return result;
     }
 }
