@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <unordered_set>
+#include <iostream>
 
 namespace network {
     DataServer::DataServer(const std::string &displayHost, int displayPort)
@@ -57,6 +58,8 @@ namespace network {
     void DataServer::handleClient(network::Socket &client) {
         std::string request;
         client.receive(request); // получаем данные от клиента в буфер request
+
+        std::cout << request<< std::endl << std::endl;
 
         /*подстрока "\r\n\r\n" - есть разделитель между заголовком и телом в HTTP POST*/
         std::size_t body_pos = request.find("\r\n\r\n");
