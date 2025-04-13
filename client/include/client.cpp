@@ -1,4 +1,5 @@
 #include "client.hpp"
+#include <iostream>
 
 namespace network {
 
@@ -22,11 +23,14 @@ namespace network {
                               "\r\n" + requestJson.dump();   // тело запроса
 
         clientSocket.send(request);
+
+        std::cout << data << std::endl << std::endl << request << std::endl << std::endl;
     }
 
     bool Client::receiveAck() {
         std::string response;
         clientSocket.receive(response);
+        std::cout << response << std::endl << std::endl;
         return response.find("HTTP/1.1 200 OK") != std::string::npos;
     }
 }
