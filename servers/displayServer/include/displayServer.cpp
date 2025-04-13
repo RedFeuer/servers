@@ -15,6 +15,16 @@ namespace network {
             throw std::runtime_error("Listen failed");
         }
         isRunning = true;
+
+        while (isRunning) {
+            Socket dataServerSocket;
+            if (serverSocket.accept(dataServerSocket)) {
+                handleClient(dataServerSocket);
+            }
+            else {
+                throw std::runtime_error("Connection error(Data_Server(as client)->Display_Server)");
+            }
+        }
     }
 
     void DisplayServer::stop() {
@@ -25,10 +35,12 @@ namespace network {
     }
 
     void DisplayServer::handleClient(network::Socket &client) {
-        std::ofstream log("display_server.log", std::ios::app); // для логов для тестов
+//        std::ofstream log("display_server.log", std::ios::app); // для логов для тестов
 
         std::string request;
         client.receive(request);
+
+        std::cout<< request << std::endl << std::endl;
 
         std::size_t body_pos = request.find("\r\n\r\n");
         if (body_pos == std::string::npos) {
@@ -47,6 +59,6 @@ namespace network {
                 "\r\n";
         client.send(response);
 
-        log << "Receiver: " << inputJson["result"] << std::endl;
+//        log << "Receiver: " << inputJson["result"] << std::endl;
     }
 }
