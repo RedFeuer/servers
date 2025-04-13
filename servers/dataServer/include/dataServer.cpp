@@ -41,7 +41,7 @@ namespace network {
                 /*Буквально по заданию
                  * Если сервер не доступен или произошла ошибка подключения, то следует вывести ошибку на экран
                  * и прекратить ожидание ввода данных.*/
-                throw std::runtime_error("Connection error"); // ВЫВОД ОШИБКИ ПРИ ОШИБКЕ ПОДКЛЮЧЕНИЯ
+                throw std::runtime_error("Connection error(Client->Data_Server)"); // ВЫВОД ОШИБКИ ПРИ ОШИБКЕ ПОДКЛЮЧЕНИЯ
             }
         }
     }
@@ -85,17 +85,23 @@ namespace network {
         std::string data = inputJson["data"];
 
         /*удаление из сообщения клиента дубликатов слов*/
-        std::string result = processData(data);
+        std::string resultData = processData(data);
 
         /*формирование запроса на сервер отображения display_server*/
-        nlohmann::json outputJson;
-        outputJson["result"] = result;
+        nlohmann::json resultJson;
+        resultJson["result"] = resultData;
         std::string response = "HTTP/1.1 200 OK\r\n"
                                "Content-Type: application/json\r\n"
-                               "Content-Length:" + std::to_string(outputJson.dump().size()) + "\r\n"
-                               + "\r\b" + outputJson.dump();
+                               "Content-Length:" + std::to_string(resultJson.dump().size()) + "\r\n"
+                               + "\r\b" + resultJson.dump();
         /*сообщаем клиенту, что инфа дошла*/
         client.send(response);
+
+        std::string result = "POST /process HTTP/1.1\r\n"         // метод запроса и путь
+                              "Host: " + displayHost + "\r\n"       // адрес сервера
+                              "Content-Type: application/json\r\n" // тип содержимого
+                              "Content-Length: " + std::to_string(resultJson.dump().size()) + "\r\n" // длина тела запроса
+                              "\r\n" + resultJson.dump();   // тело запроса
 
         /*ТУТ ДОПИСАТЬ СВЯЗЬ С display_server и отправку туда данных*/
         /*ПРОВЕРИТЬ ЛОГИКУ connect!!!!! чето я запутался, наверное пора спать*/
