@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <nlohmann/json.hpp>
 #include <iostream>
+#include <fstream>
 
 namespace network {
     DisplayServer::~DisplayServer() {stop();}
@@ -24,6 +25,8 @@ namespace network {
     }
 
     void DisplayServer::handleClient(network::Socket &client) {
+        std::ofstream log("display_server.log", std::ios::app); // для логов для тестов
+
         std::string request;
         client.receive(request);
 
@@ -43,5 +46,7 @@ namespace network {
                 "Content-Length: 0\r\n"
                 "\r\n";
         client.send(response);
+
+        log << "Receiver: " << inputJson["result"] << std::endl;
     }
 }
