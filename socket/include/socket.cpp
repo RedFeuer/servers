@@ -6,7 +6,7 @@
 
 namespace network {
     /*иницилизация Winsock*/
-    #ifdef _WIN32
+#ifdef _WIN32
     #pragma comment(lib, "ws2_32.lib")
     class WSAInitializer {
     public:
@@ -19,7 +19,7 @@ namespace network {
         ~WSAInitializer() {WSACleanup();};
     };
     static WSAInitializer wsaInitializer;
-    #endif
+#endif
 
     Socket::Socket() {
         create(); // создаем сокет
@@ -32,11 +32,11 @@ namespace network {
     bool Socket::create() {
         /*0 - для TCP*/
         sockfd = socket(AF_INET, SOCK_STREAM, 0);
-        #ifdef _WIN32
+#ifdef _WIN32
         if (sockfd == INVALID_SOCKET) {return false;}
-        #else
+#else
         if (sockfd < 0) {return false;}
-        #endif
+#endif
         isClosed = false; // открыт
         return true;
     }
@@ -47,67 +47,46 @@ namespace network {
         addr.sin_addr.s_addr = INADDR_ANY; // Все интерфейсы(0.0.0.0)
         addr.sin_port = htons(port); // Порт в сетевом порядке байт(конвертим)
 
-        #ifdef _WIN32
+#ifdef _WIN32
         return ::bind(sockfd, (sockaddr*)&addr, sizeof(addr)) != SOCKET_ERROR;
-        #else
+#else
         return ::bind(sockfd, (sockaddr*)&addr, sizeof(addr)) == 0;
-        #endif
+#endif
     }
 
     bool Socket::listen(int backlog) {
-        #ifdef _WIN32
+#ifdef _WIN32
         return ::listen(sockfd, backlog) != SOCKET_ERROR;
-        #else
+#else
         return ::listen(sockfd, backlog) == 0;
-        #endif
+#endif
     }
 
     bool Socket::accept(Socket &clientSocket) {
         sockaddr_in clientAddr{};    // хранит Host и Port клиента
         socklen_t len = sizeof(clientAddr);
-        if (isConnected) {return true;}
         clientSocket.sockfd = ::accept(sockfd, (sockaddr*)&clientAddr, &len); // создание клиентского сокета
-        #ifdef _WIN32
-//        return clientSocket.sockfd != INVALID_SOCKET;
-        if (clientSocket.sockfd != INVALID_SOCKET) {
-            clientSocket.isConnected = true;
-            return true;
-        }
-    return false;
-
-        #else
-//        return clientSocket.sockfd >= 0;
-        if (clientSocket.sockfd >= 0) {
-            clientSocket.isConnected = true;
-            return true;
-        }
-        return false;
-
-        #endif
+#ifdef _WIN32
+        return clientSocket.sockfd != INVALID_SOCKET;
+#else
+        return clientSocket.sockfd >= 0;
+#endif
     }
 
     bool Socket::connect(const std::string &host, int port) {
         sockaddr_in addr{};
         addr.sin_family = AF_INET;
         addr.sin_port = htons(port);
-        #ifdef _WIN32
+#ifdef _WIN32
         if (InetPton(AF_INET, host.c_str(), &addr.sin_addr) != 1) {
             return false;
         }
-        #else
+#else
         if (inet_pton(AF_INET, host.c_str(), &addr.sin_addr) != 1) { // IPv4 -> бинарный формат
             return false;
         }
-        #endif
-//        return ::connect(sockfd, (sockaddr*)&addr, sizeof(addr)) == 0;
-        if (!isConnected) {
-            if (::connect(sockfd, (sockaddr*)&addr, sizeof(addr)) == 0) {
-                isConnected = true;
-                return true;
-            }
-        }
-        else {return true;} // уже произошел connect
-        return false;
+#endif
+        return ::connect(sockfd, (sockaddr*)&addr, sizeof(addr)) == 0;
     }
 
     ssize_t Socket::send(const std::string &data) {
@@ -137,13 +116,12 @@ namespace network {
 
     void Socket::close() {
         if (!isClosed) {
-            #ifdef _WIN32
+#ifdef _WIN32
             closesocket(sockfd)
-            #else
+#else
             ::close(sockfd);
-            #endif
+#endif
             isClosed = true;
-            // isConnected_ = false;
         }
     }
 

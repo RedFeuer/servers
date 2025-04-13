@@ -117,6 +117,9 @@ namespace network {
         /*ТУТ ДОПИСАТЬ СВЯЗЬ С display_server и отправку туда данных*/
         /*ПРОВЕРИТЬ ЛОГИКУ connect!!!!! чето я запутался, наверное пора спать*/
 
+        /*каждый раз создаем новый коннект с data_server, иначе это не новое соединение
+         * и if (serverSocket.accept(clientSocket)) не пропустит к обработке данных
+         * и отправке на сервер*/
         network::Socket displaySocket_;
         if (!displaySocket_.connect(displayHost, displayPort)) {
             throw std::runtime_error("Display server connection failed");
