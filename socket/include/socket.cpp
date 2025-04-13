@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include <cstring>
 
+#include <iostream>
+
 namespace network {
     /*иницилизация Winsock*/
     #ifdef _WIN32
@@ -91,8 +93,25 @@ namespace network {
         return ::send(sockfd, data.data(), data.size(), 0);
     }
 
+    /*кривая буферная реализация, мб потом перепишу поумнее, но пока работает*/
     ssize_t Socket::receive(std::string &buffer) {
-        return ::recv(sockfd, buffer.data(), buffer.size(), 0);
+        char tempBuffer[4096];
+        ssize_t totalBytes = 0;
+
+        while (true) {
+            ssize_t bytesRead = ::recv(sockfd, tempBuffer, sizeof(tempBuffer), 0);
+            if (bytesRead <= 0) break; // ошибка или конец данных
+
+            buffer.append(tempBuffer, bytesRead);
+            totalBytes += bytesRead;
+
+            /* проверяем на завершение HTTP-запроса (наличие \r\n\r\n) */
+            if (buffer.find("\r\n\r\n") != std::string::npos) {
+                break;
+            }
+        }
+
+        return totalBytes;
     }
 
     void Socket::close() {
