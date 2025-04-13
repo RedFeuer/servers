@@ -87,11 +87,11 @@ namespace network {
         return ::connect(sockfd, (sockaddr*)&addr, sizeof(addr)) == 0;
     }
 
-    int Socket::send(const std::string &data) {
+    ssize_t Socket::send(const std::string &data) {
         return ::send(sockfd, data.data(), data.size(), 0);
     }
 
-    int Socket::receive(std::string &buffer) {
+    ssize_t Socket::receive(std::string &buffer) {
         return ::recv(sockfd, buffer.data(), buffer.size(), 0);
     }
 

@@ -111,7 +111,7 @@ namespace network {
          * data.size() - размер данных в байтах.
          * 0 - флаг выбора способа вызова (в данном случае по умолчанию)
          */
-        int send(const std::string& data);
+        ssize_t send(const std::string& data);
 //        int send(const std::vector<char>& data);
 
         /**
@@ -124,7 +124,7 @@ namespace network {
          * buffer.size() - размер данных в байтах.
          * 0 - флаг выбора способа вызова (в данном случае по умолчанию)
          */
-        int receive(std::string& buffer);
+        ssize_t receive(std::string& buffer);
 //        int receive(std::vector<char>& buffer);
 
         /**
