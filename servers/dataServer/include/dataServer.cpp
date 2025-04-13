@@ -94,6 +94,8 @@ namespace network {
                                "Content-Type: application/json\r\n"
                                "Content-Length:" + std::to_string(outputJson.dump().size()) + "\r\n"
                                + "\r\b" + outputJson.dump();
+        /*сообщаем клиенту, что инфа дошла*/
+        client.send(response);
 
         /*ТУТ ДОПИСАТЬ СВЯЗЬ С display_server и отправку туда данных*/
         /*ПРОВЕРИТЬ ЛОГИКУ connect!!!!! чето я запутался, наверное пора спать*/
