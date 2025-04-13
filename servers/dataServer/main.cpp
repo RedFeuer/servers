@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
         std::cerr << "Usage: data_server_exec <data_port> <displayport>\n";
     }
 
-    std::string displayHost = "localhost"; // IP сервера отображения
+    std::string displayHost = "127.0.0.1"; // IP сервера отображения
     int displayPort = std::stoi(argv[1]);               // порт сервера отображения
     int dataPort = std::stoi(argv[2]);                // порт текущего data-сервера
 
