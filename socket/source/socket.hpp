@@ -141,6 +141,7 @@ namespace network {
         int sockfd = -1; ///< Дескриптор сокета (POSIX)
         #endif
         bool isClosed = true; ///< Флаг состояния сокета(закрыт/открыт)
+        bool isConnected = false;
     };
 }
 

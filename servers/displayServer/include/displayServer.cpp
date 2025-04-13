@@ -22,10 +22,10 @@ namespace network {
                 handleClient(dataServerSocket);
             }
             else {
-                dataServerSocket.close();
+//                dataServerSocket.close();
                 throw std::runtime_error("Connection error(Data_Server(as client)->Display_Server)");
             }
-            dataServerSocket.close();
+//            dataServerSocket.close();
         }
     }
 

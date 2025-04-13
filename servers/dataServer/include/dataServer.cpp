@@ -34,18 +34,18 @@ namespace network {
                     handleClient(clientSocket);
                 }
                 catch (...) { // все ошибки прокидываем дальше, чтобы потом обработать
-                    clientSocket.close();
+//                    clientSocket.close();
                     throw;
                 }
             }
             else {
-                clientSocket.close();
+//                clientSocket.close();
                 /*Буквально по заданию
                  * Если сервер не доступен или произошла ошибка подключения, то следует вывести ошибку на экран
                  * и прекратить ожидание ввода данных.*/
                 throw std::runtime_error("Connection error(Client->Data_Server)"); // ВЫВОД ОШИБКИ ПРИ ОШИБКЕ ПОДКЛЮЧЕНИЯ
             }
-            clientSocket.close();
+//            clientSocket.close();
         }
     }
 
@@ -106,7 +106,7 @@ namespace network {
                                + "\r\b" + resultJson.dump();
         /*сообщаем клиенту, что инфа дошла*/
         client.send(response);
-        client.close();
+//        client.close();
 
         std::string result = "POST /process HTTP/1.1\r\n"         // метод запроса и путь
                               "Host: " + displayHost + "\r\n"       // адрес сервера
@@ -116,11 +116,16 @@ namespace network {
 
         /*ТУТ ДОПИСАТЬ СВЯЗЬ С display_server и отправку туда данных*/
         /*ПРОВЕРИТЬ ЛОГИКУ connect!!!!! чето я запутался, наверное пора спать*/
-        if (!displaySocket.connect(displayHost, displayPort)) {
+
+        network::Socket displaySocket_;
+        if (!displaySocket_.connect(displayHost, displayPort)) {
             throw std::runtime_error("Display server connection failed");
         }
-        displaySocket.send(result);
-        displaySocket.close();
+//        if (!displaySocket.connect(displayHost, displayPort)) {
+//            throw std::runtime_error("Display server connection failed");
+//        }
+        displaySocket_.send(result);
+        displaySocket_.close();
     }
 
     /*НЕ СОВСЕМ ПОНЯЛ В ИТОГЕ ЧТО ИМЕЕТСЯ В ВИДУ ПОД ДУБЛИКАТАМИ

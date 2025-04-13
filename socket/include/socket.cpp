@@ -65,11 +65,24 @@ namespace network {
     bool Socket::accept(Socket &clientSocket) {
         sockaddr_in clientAddr{};    // хранит Host и Port клиента
         socklen_t len = sizeof(clientAddr);
+        if (isConnected) {return true;}
         clientSocket.sockfd = ::accept(sockfd, (sockaddr*)&clientAddr, &len); // создание клиентского сокета
         #ifdef _WIN32
-        return clientSocket.sockfd != INVALID_SOCKET;
+//        return clientSocket.sockfd != INVALID_SOCKET;
+        if (clientSocket.sockfd != INVALID_SOCKET) {
+            clientSocket.isConnected = true;
+            return true;
+        }
+    return false;
+
         #else
-        return clientSocket.sockfd >= 0;
+//        return clientSocket.sockfd >= 0;
+        if (clientSocket.sockfd >= 0) {
+            clientSocket.isConnected = true;
+            return true;
+        }
+        return false;
+
         #endif
     }
 
@@ -86,7 +99,15 @@ namespace network {
             return false;
         }
         #endif
-        return ::connect(sockfd, (sockaddr*)&addr, sizeof(addr)) == 0;
+//        return ::connect(sockfd, (sockaddr*)&addr, sizeof(addr)) == 0;
+        if (!isConnected) {
+            if (::connect(sockfd, (sockaddr*)&addr, sizeof(addr)) == 0) {
+                isConnected = true;
+                return true;
+            }
+        }
+        else {return true;} // уже произошел connect
+        return false;
     }
 
     ssize_t Socket::send(const std::string &data) {
@@ -122,6 +143,7 @@ namespace network {
             ::close(sockfd);
             #endif
             isClosed = true;
+            // isConnected_ = false;
         }
     }
 
