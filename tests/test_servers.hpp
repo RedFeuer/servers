@@ -12,13 +12,17 @@ public:
     void Start() {
         /* Запуск сервера отображения в отдельном процессе*/
         display_server_ = std::thread([this]() {
-            std::system(("./display_server " + std::to_string(display_port_)).c_str());
+            std::system(("./servers/displayServer/display_server_exec " + std::to_string(display_port_)).c_str());
         });
 
         /* Запуск сервера обработки данных */
         data_server_ = std::thread([this]() {
-            std::system(("./data_server " + std::to_string(data_port_)
-                         + " localhost " + std::to_string(display_port_)).c_str());
+            // передаем только порты
+            std::system((
+                                "./servers/dataServer/data_server_exec " +
+                                std::to_string(data_port_) + " " +
+                                std::to_string(display_port_)
+                        ).c_str());
         });
 
         /* Ждем инициализации серверов*/
@@ -27,8 +31,8 @@ public:
 
     ~TestServers() {
         /* Остановка серверов (для Linux)*/
-        std::system("pkill data_server");
-        std::system("pkill display_server");
+        std::system("pkill -f data_server_exec");
+        std::system("pkill -f display_server_exec");
         if (data_server_.joinable()) data_server_.join();
         if (display_server_.joinable()) display_server_.join();
     }
