@@ -124,11 +124,17 @@ namespace network {
 
     void Socket::close() {
         if (!isClosed) {
-#ifdef _WIN32
-            closesocket(sockfd)
-#else
-            ::close(sockfd);
-#endif
+        #ifdef _WIN32
+//            closesocket(sockfd)
+            if (sockfd != INVALID_SOCKET) {
+                closesocket(sockfd);
+            }
+        #else
+            if (sockfd != -1) {
+                ::close(sockfd);
+            }
+//            ::close(sockfd);
+        #endif
             isClosed = true;
         }
     }

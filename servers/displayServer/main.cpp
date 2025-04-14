@@ -5,13 +5,16 @@
 
 std::unique_ptr<network::DisplayServer> server;
 
-//void signalHandler(int signal) {
-//    if (server) {
-//        std::cout << "\nStopping display server...\n";
-//        server->stop();
-//    }
-//    std::_Exit(0);
-//}
+
+/*
+ * не вызываем std::_Exit(0), потому что он не вызывает деструкторы!
+ * вместо этого просто стопим сервер и возвращаем управление main*/
+void signalHandler(int signal) {
+    if (server) {
+        std::cout << "\nStopping display server...\n";
+        server->stop();  /* прерываем цикл в main */
+    }
+}
 
 int main(int argc, char* argv[]) {
     /*инструкция по применению(показывает, чтобы ты порт написал в консоли)*/
@@ -25,7 +28,10 @@ int main(int argc, char* argv[]) {
 
 //    std::cout << port << std::endl << std::endl;
 
-//    std::signal(SIGINT, signalHandler);
+    /* при нажатии Ctrl+C происходит не завершение прочесса через std::_Exit(0)(когда деструктор не вызывается,
+     * что ломает поведение программы и вызывает утечки в still_reachable), а вызов функции signalHandler,
+     * которая стопит сервер по-нормальному*/
+    std::signal(SIGINT, signalHandler);
 
     server = std::make_unique<network::DisplayServer>();
 
