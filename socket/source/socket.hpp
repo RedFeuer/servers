@@ -1,6 +1,14 @@
 #ifndef SOCKET_HPP
 #define SOCKET_HPP
 
+/**
+ * @file Socket.hpp
+ * @brief Класс для работы с сетевыми сокетами (TCP/IPv4)
+ *
+ * Реализация поддерживает Windows (Winsock 2.2) и POSIX-системы (Linux/macOS).
+ * Использует RAII для управления ресурсами сокетов.
+ */
+
 #include <vector>
 #include <string>
 #include <cstddef>
