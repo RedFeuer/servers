@@ -7,13 +7,18 @@
 
 std::unique_ptr<network::DataServer> server;
 
-//void signalHandler(int signum) {
-//    if (server) {
-//        std::cout << "\nОстановка сервера..." << std::endl;
-//        server->stop();
-//    }
-//    std::_Exit(0);
-//}
+
+/*
+ * не вызываем std::_Exit(0), потому что он не вызывает деструкторы!
+ * вместо этого просто стопим сервер и возвращаем управление main*/
+void signalHandler(int signal) {
+    if (server) {
+        std::cout << "\nStopping DATA server..." << std::endl;
+        server->stop();
+    }
+    server.reset(); // удаляем указатель и вызываем деструктор
+    std::_Exit(0);
+}
 
 int main(int argc, char* argv[]) {
     if (argc < 3) {
@@ -24,8 +29,9 @@ int main(int argc, char* argv[]) {
     int displayPort = std::stoi(argv[1]);               // порт сервера отображения
     int dataPort = std::stoi(argv[2]);                // порт текущего data-сервера
 
-    // Назначаем обработчик сигнала прерывания (Ctrl+C)
-//    std::signal(SIGINT, signalHandler);
+    /* при нажатии Ctrl+C происходит не завершение прочесса через std::_Exit(0), а вызов функции signalHandler,
+    * которая стопит сервер по-нормальному*/
+    std::signal(SIGINT, signalHandler);
 
     try {
         server = std::make_unique<network::DataServer>(displayHost, displayPort);

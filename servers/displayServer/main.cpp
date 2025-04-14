@@ -11,7 +11,7 @@ std::unique_ptr<network::DisplayServer> server;
  * вместо этого просто стопим сервер и возвращаем управление main*/
 void signalHandler(int signal) {
     if (server) {
-        std::cout << "\nStopping display server...\n";
+        std::cout << "\nStopping DISPLAY server...\n";
         server->stop();  /* прерываем цикл в main */
     }
 }
