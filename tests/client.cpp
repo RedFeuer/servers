@@ -2,7 +2,6 @@
 #include "client.hpp"
 #include "dataServer.hpp"
 #include "displayServer.hpp"
-#include "test_servers.hpp"
 
 TEST(Client, Connect) {
     std::string dataHost = "127.0.0.1";
@@ -44,4 +43,22 @@ TEST(Client, sendData) {
 //
 //    /*отправили данные и они дошли*/
 //    ASSERT_EQ(client.receiveAck(), true);
+}
+
+TEST(Client, getClientSocket) {
+    std::string dataHost = "127.0.0.1";
+    int dataPort =  9080;
+
+    network::Client client(dataHost, dataPort);
+
+    std::string displayHost = "127.0.0.1";
+    int displayPort = 9090;
+    network::DataServer dataServer(displayHost, displayPort);
+    dataServer.getServerSocket().bind(dataPort);
+    dataServer.getServerSocket().listen();
+
+    client.connectToServer();
+
+    /*проверка типа данных*/
+    ASSERT_EQ(typeid(client.getClientSocket()), typeid(network::Socket));
 }

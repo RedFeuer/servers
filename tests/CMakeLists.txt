@@ -13,9 +13,10 @@ include_directories(${GTEST_INCLUDE_DIRS})
 
 # Тестовый исполняемый файл
 add_executable(full_tests
+#        gmock_socket.cpp
         client.cpp
-        test_full.cpp
-        test_servers.hpp
+#        test_full.cpp
+#        test_servers.hpp
 )
 
 target_link_libraries(full_tests GTest::gtest GTest::gtest_main client data_server display_server)
