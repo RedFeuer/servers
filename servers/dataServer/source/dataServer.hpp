@@ -17,7 +17,9 @@ namespace network {
         [[nodiscard]] Socket& getServerSocket() {return serverSocket;}
         [[nodiscard]] Socket& getDisplaySocket() {return displaySocket;}
 
-        [[nodiscard]] bool getIsRunnign() const {return isRunning;}
+        [[nodiscard]] bool getIsRunning() const {return isRunning;}
+
+        void setIsRunning(bool status) {isRunning = status;}
 
     private:
         Socket serverSocket;   // для приема клиентов

@@ -15,6 +15,7 @@ include_directories(${GTEST_INCLUDE_DIRS})
 add_executable(full_tests
 #        gmock_socket.cpp
         client.cpp
+        dataServer.cpp
 #        test_full.cpp
 #        test_servers.hpp
 )
