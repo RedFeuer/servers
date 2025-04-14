@@ -13,6 +13,9 @@ namespace network {
         void handleClient(Socket& client) override;
 
         [[nodiscard]] Socket & getServerSocket() {return serverSocket;}
+        [[nodiscard]] bool getIsRunning() const {return isRunning;}
+
+        void setIsRunning(bool status) {isRunning = status;}
 
     private:
         Socket serverSocket;  // для приема данных от dataServer
