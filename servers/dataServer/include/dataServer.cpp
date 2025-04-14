@@ -81,6 +81,7 @@ namespace network {
         /*парсим строку, чтобы получить объект nlohmann::json*/
         nlohmann::json inputJson = nlohmann::json::parse(jsonBody);
 
+        /*ПРОВЕРКА ПЕРЕДАННЫХ ДАННЫХ НА КОРРЕКТНОСТЬ*/
         if (!inputJson.contains("data")) { // чтобы не получить nullptr
             /*в теле сообщения нет data(клиент не передал сообщение)*/
             std::string errorResponse = "HTTP/1.1 400 Bad Request\r\n"
