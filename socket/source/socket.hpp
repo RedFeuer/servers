@@ -31,7 +31,6 @@ namespace network {
     public:
         /**
          * @brief Конструктор по умолчанию
-         * @throw std::runtime_error Если не удалось инициализировать Winsock (Windows)
          */
         Socket();
         /**
@@ -88,8 +87,8 @@ namespace network {
         bool accept(Socket& clientSocket);
 
         /**
-         * @brief Устанавливает соединение с сервером (клиент ->сервер)
-         * @param host IP-адрес или доменное имя сервера
+         * @brief Устанавливает соединение с сервером (клиент->сервер)
+         * @param host IP-адрес сервера
          * @param port Порт сервера
          * @return true - подключено, false - ошибка
          *
@@ -112,12 +111,11 @@ namespace network {
          * 0 - флаг выбора способа вызова (в данном случае по умолчанию)
          */
         ssize_t send(const std::string& data);
-//        int send(const std::vector<char>& data);
 
         /**
          * @brief Принимает данные из сокета
          * @param[out] buffer Буфер для приема данных
-         * @return Количество принятых байт, 0 при корректном закрытии подключения или -1(SOCKET_ERROR) при ошибке
+         * @return Количество принятых байт, >=0 при корректном закрытии подключения или -1(SOCKET_ERROR) при ошибке
          *
          * sockfd - дескриптор сокета.
          * buffer.data() - указатель на данные (строка).
@@ -125,7 +123,6 @@ namespace network {
          * 0 - флаг выбора способа вызова (в данном случае по умолчанию)
          */
         ssize_t receive(std::string& buffer);
-//        int receive(std::vector<char>& buffer);
 
         /**
          * @brief Закрывает сокет
@@ -141,7 +138,6 @@ namespace network {
         int sockfd = -1; ///< Дескриптор сокета (POSIX)
         #endif
         bool isClosed = true; ///< Флаг состояния сокета(закрыт/открыт)
-//        bool isConnected = false;
     };
 }
 

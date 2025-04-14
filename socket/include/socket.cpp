@@ -101,7 +101,7 @@ namespace network {
         return ::send(sockfd, data.data(), data.size(), 0);
     }
 
-    /*кривая буферная реализация, мб потом перепишу поумнее, но пока работает*/
+
     ssize_t Socket::receive(std::string &buffer) {
         char tempBuffer[4096];
         ssize_t totalBytes = 0;
