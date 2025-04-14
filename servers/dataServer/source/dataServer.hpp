@@ -14,6 +14,11 @@ namespace network {
         void stop() override;
         void handleClient(Socket& client) override;
 
+        [[nodiscard]] Socket& getServerSocket() {return serverSocket;}
+        [[nodiscard]] Socket& getDisplaySocket() {return displaySocket;}
+
+        [[nodiscard]] bool getIsRunnign() const {return isRunning;}
+
     private:
         Socket serverSocket;   // для приема клиентов
         Socket displaySocket; // для отправки данных на сервер отображения

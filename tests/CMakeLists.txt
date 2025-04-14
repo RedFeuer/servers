@@ -13,6 +13,7 @@ include_directories(${GTEST_INCLUDE_DIRS})
 
 # Тестовый исполняемый файл
 add_executable(full_tests
+        client.cpp
         test_full.cpp
         test_servers.hpp
 )

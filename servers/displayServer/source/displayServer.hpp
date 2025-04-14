@@ -12,6 +12,8 @@ namespace network {
         void stop() override;
         void handleClient(Socket& client) override;
 
+        [[nodiscard]] Socket & getServerSocket() {return serverSocket;}
+
     private:
         Socket serverSocket;  // для приема данных от dataServer
         bool isRunning = false;

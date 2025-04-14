@@ -63,6 +63,8 @@ namespace network {
          */
         bool receiveAck();
 
+        [[nodiscard]] Socket& getClientSocket() {return clientSocket;}
+
     private:
         Socket clientSocket;   ///< дескриптор сокета data_server и состояние того, что соединение установлено. Дальнейшие send/recv через него
         std::string serverHost; ///< Адрес data_server

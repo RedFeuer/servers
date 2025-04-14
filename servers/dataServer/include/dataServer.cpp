@@ -62,12 +62,13 @@ namespace network {
         std::string request;
         client.receive(request); // получаем данные от клиента в буфер request
 
-        if (request.empty()) {
-            std::cout << "EMPTY DATA" << std::endl << std::endl;
-        }
-        else {
-            std::cout << request<< std::endl << std::endl;
-        }
+        /*ЭТО ОТЛАДОЧНОЕ, УБРАТЬ!!!!!*/
+//        if (request.empty()) {
+//            std::cout << "EMPTY DATA" << std::endl << std::endl;
+//        }
+//        else {
+//            std::cout << request<< std::endl << std::endl;
+//        }
 
         /*подстрока "\r\n\r\n" - есть разделитель между заголовком и телом в HTTP POST*/
         std::size_t body_pos = request.find("\r\n\r\n");
