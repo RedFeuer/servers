@@ -1,10 +1,11 @@
 #include "dataServer.hpp"
 #include <iostream>
 #include <csignal>
+#include <memory>
 
 //using namespace network;
 
-network::DataServer* server = nullptr;
+std::unique_ptr<network::DataServer> server;
 
 //void signalHandler(int signum) {
 //    if (server) {
@@ -27,7 +28,7 @@ int main(int argc, char* argv[]) {
 //    std::signal(SIGINT, signalHandler);
 
     try {
-        server = new network::DataServer(displayHost, displayPort);
+        server = std::make_unique<network::DataServer>(displayHost, displayPort);
         server->start(dataPort);
     } catch (const std::exception& e) {
         std::cerr << "Error starting data server: " << e.what() << std::endl;
