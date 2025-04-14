@@ -11,8 +11,6 @@ namespace network {
     : displayHost(displayHost), displayPort(displayPort) {}
 
     DataServer::~DataServer() {
-//        serverSocket.close();
-//        displaySocket.close();
         stop();
     };
 
@@ -34,18 +32,15 @@ namespace network {
                     handleClient(clientSocket);
                 }
                 catch (...) { // все ошибки прокидываем дальше, чтобы потом обработать
-//                    clientSocket.close();
                     throw;
                 }
             }
             else {
-//                clientSocket.close();
                 /*Буквально по заданию
                  * Если сервер не доступен или произошла ошибка подключения, то следует вывести ошибку на экран
                  * и прекратить ожидание ввода данных.*/
                 throw std::runtime_error("Connection error(Client->Data_Server)"); // ВЫВОД ОШИБКИ ПРИ ОШИБКЕ ПОДКЛЮЧЕНИЯ
             }
-//            clientSocket.close();
         }
     }
 
@@ -61,14 +56,6 @@ namespace network {
     void DataServer::handleClient(network::Socket &client) {
         std::string request;
         client.receive(request); // получаем данные от клиента в буфер request
-
-        /*ЭТО ОТЛАДОЧНОЕ, УБРАТЬ!!!!!*/
-//        if (request.empty()) {
-//            std::cout << "EMPTY DATA" << std::endl << std::endl;
-//        }
-//        else {
-//            std::cout << request<< std::endl << std::endl;
-//        }
 
         /*подстрока "\r\n\r\n" - есть разделитель между заголовком и телом в HTTP POST*/
         std::size_t body_pos = request.find("\r\n\r\n");
@@ -89,7 +76,6 @@ namespace network {
                                         "Content-Length: 47\r\n\r\n"
                                         "{\"error\":\"Missing required 'data' field\"}";
 
-//            std::cout <<errorResponse << std::endl << std::endl;
             /*передаем ошибку клиенту*/
             client.send(errorResponse);
             return;
@@ -108,7 +94,6 @@ namespace network {
                                + "\r\b" + resultJson.dump();
         /*сообщаем клиенту, что инфа дошла*/
         client.send(response);
-//        client.close();
 
         std::string result = "POST /process HTTP/1.1\r\n"         // метод запроса и путь
                               "Host: " + displayHost + "\r\n"       // адрес сервера
@@ -126,9 +111,6 @@ namespace network {
         if (!displaySocket_.connect(displayHost, displayPort)) {
             throw std::runtime_error("Display server connection failed");
         }
-//        if (!displaySocket.connect(displayHost, displayPort)) {
-//            throw std::runtime_error("Display server connection failed");
-//        }
         displaySocket_.send(result);
         displaySocket_.close();
     }
