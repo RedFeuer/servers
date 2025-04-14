@@ -26,7 +26,7 @@ Content-Length: 23
 1-й терминал:
 ```bash
 rm -rf build && mkdir build && cd build
-clear && cmake .. && make
+clear && cmake .. && make && clear
 ./servers/displayServer/display_server_exec 9090
 ```
 2-й терминал:
