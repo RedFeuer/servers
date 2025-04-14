@@ -9,7 +9,7 @@ std::unique_ptr<network::DisplayServer> server;
 /*
  * не вызываем std::_Exit(0), потому что он не вызывает деструкторы!
  * вместо этого просто стопим сервер и возвращаем управление main*/
-void signalHandler(int signal) {
+void signalHandler([[maybe_unused]] int signal) {
     if (server) {
         std::cout << "\nStopping DISPLAY server...\n";
         server->stop();  /* прерываем цикл в main */
