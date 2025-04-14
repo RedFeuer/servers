@@ -57,6 +57,9 @@ TEST_F(IntegrationTest, FullCycleTestExample1) {
     int result = std::system(command.c_str());
     ASSERT_EQ(result, 0) << "Client execution failed";
 
+    /*дам время на обработку данных*/
+    std::this_thread::sleep_for(0.5s);
+
     /*проверка вывода на display_server*/
     std::ifstream log_file("test_output.log");
     test_output = std::string((std::istreambuf_iterator<char>(log_file)),
@@ -83,6 +86,9 @@ TEST_F(IntegrationTest, FullCycleTestExample2) {
 
     int result = std::system(command.c_str());
     ASSERT_EQ(result, 0) << "Client execution failed";
+
+    /*дам время на обработку данных*/
+    std::this_thread::sleep_for(1s);
 
     /*проверка вывода на display_server*/
     std::ifstream log_file("test_output.log");
