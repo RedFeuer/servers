@@ -24,7 +24,7 @@ namespace network {
 
         clientSocket.send(request);
 
-        std::cout << data << std::endl << std::endl << request << std::endl << std::endl;
+//        std::cout << data << std::endl << std::endl << request << std::endl << std::endl;
     }
 
     bool Client::receiveAck() {

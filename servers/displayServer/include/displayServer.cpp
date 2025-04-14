@@ -42,7 +42,7 @@ namespace network {
         std::string request;
         client.receive(request);
 
-        std::cout<< request << std::endl << std::endl;
+//        std::cout<< request << std::endl << std::endl;
 
         std::size_t body_pos = request.find("\r\n\r\n");
         if (body_pos == std::string::npos) {

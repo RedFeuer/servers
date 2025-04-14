@@ -87,7 +87,7 @@ namespace network {
                                         "Content-Length: 47\r\n\r\n"
                                         "{\"error\":\"Missing required 'data' field\"}";
 
-            std::cout <<errorResponse << std::endl << std::endl;
+//            std::cout <<errorResponse << std::endl << std::endl;
             /*передаем ошибку клиенту*/
             client.send(errorResponse);
             return;
