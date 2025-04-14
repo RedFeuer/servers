@@ -13,6 +13,8 @@ include_directories(${GTEST_INCLUDE_DIRS})
 
 # Тестовый исполняемый файл
 add_executable(full_tests
+        integration_tests.cpp
+
         client.cpp
         socket.cpp
         dataServer.cpp
