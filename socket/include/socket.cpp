@@ -43,6 +43,7 @@ namespace network {
 
     bool Socket::bind(int port) {
         int opt = 1;
+        /*изменение флагов сокета для разрешения повторного использования адресов*/
         #ifdef _WIN32
         setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (const char*)&opt, sizeof(opt));
         #else
