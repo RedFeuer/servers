@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Danila Bespyatov
+
 #ifndef SOCKET_HPP
 #define SOCKET_HPP
 

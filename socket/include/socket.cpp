@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Danila Bespyatov
+
 #include "socket.hpp"
 #include <stdexcept>
 #include <cstring>

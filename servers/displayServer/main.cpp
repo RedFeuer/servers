@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Danila Bespyatov
+
 #include "displayServer.hpp"
 #include <iostream>
 #include <csignal>

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 Danila Bespyatov
+
 #ifndef DATASERVER_HPP
 #define DATASERVER_HPP
 
